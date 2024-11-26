@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presente Especial</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Parkinsans:wght@300..800&display=swap"
+        rel="stylesheet">
+
+</head>
+
+<body>
+    <!-- Carrossel -->
+    <div class="carousel">
+        <div class="carousel-images">
+            <img src="img/img_1.jpeg" alt="Imagem 1">
+            <img src="img/img_2.jpeg" alt="Imagem 2">
+            <img src="img/img_3.jpeg" alt="Imagem 3">
+            <img src="img/img_4.jpeg" alt="Imagem 4">
+            <img src="img/img_5.jpeg" alt="Imagem 5">
+        </div>
+    </div>
+
+    <!-- Conteúdo abaixo -->
+    <h1>Daniel e Jayne</h1>
+    <p>Feliz aniversário, meu amor!
+        Obrigado por tudo que você é e por cada momento que compartilhamos. Criei este site para mostrar o quanto cada
+        segundo ao seu lado é único e especial. Te amo!</p>
+    <h2>Nosso Tempo Juntos:</h2>
+
+    <!-- Contagem Regressiva -->
+    <div class="countdown">
+        <div>
+            <span id="months">0</span>
+            <label>Meses</label>
+        </div>
+        <div>
+            <span id="days">0</span>
+            <label>Dias</label>
+        </div>
+        <div>
+            <span id="hours">0</span>
+            <label>Horas</label>
+        </div>
+        <div>
+            <span id="minutes">0</span>
+            <label>Minutos</label>
+        </div>
+        <div>
+            <span id="seconds">0</span>
+            <label>Segundos</label>
+        </div>
+    </div>
+
+    <script>
+        // Configuração do carrossel
+        const carouselImages = document.querySelector('.carousel-images');
+        let index = 0;
+
+        setInterval(() => {
+            index = (index + 1) % 5; // Alterne entre 0, 1, 2
+            carouselImages.style.transform = `translateX(-${index * 100}%)`;
+        }, 3000);
+
+
+        // Função para observar as divs
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Adiciona a classe 'visible' quando o elemento está visível
+                        entry.target.classList.add('visible');
+                    } else {
+                        // Remove a classe 'visible' quando o elemento sai de vista
+                        entry.target.classList.remove('visible');
+                    }
+                });
+            },
+            { threshold: 0.1 } // Define o nível de visibilidade mínima (10%) para ativar
+        );
+
+        // Seleciona as divs da contagem regressiva
+        const countdownDivs = document.querySelectorAll('.countdown div');
+
+        // Adiciona cada div ao observer
+        countdownDivs.forEach(div => observer.observe(div));
+
+        const startDate = new Date("2024-04-20T18:30:00");
+
+        function updateElapsedTime() {
+            const now = new Date();
+
+            let years = now.getFullYear() - startDate.getFullYear();
+            let months = now.getMonth() - startDate.getMonth();
+            let days = now.getDate() - startDate.getDate();
+            let hours = now.getHours() - startDate.getHours();
+            let minutes = now.getMinutes() - startDate.getMinutes();
+            let seconds = now.getSeconds() - startDate.getSeconds();
+
+            // Ajustar meses, dias e outros cálculos negativos
+            if (seconds < 0) {
+                seconds += 60;
+                minutes--;
+            }
+            if (minutes < 0) {
+                minutes += 60;
+                hours--;
+            }
+            if (hours < 0) {
+                hours += 24;
+                days--;
+            }
+            if (days < 0) {
+                const previousMonth = new Date(now.getFullYear(), now.getMonth(), 0); // Último dia do mês anterior
+                days += previousMonth.getDate();
+                months--;
+            }
+            if (months < 0) {
+                months += 12;
+                years--;
+            }
+
+            // Atualizar o DOM
+            document.getElementById('months').textContent = years * 12 + months; // Total de meses
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours;
+            document.getElementById('minutes').textContent = minutes;
+            document.getElementById('seconds').textContent = seconds;
+        }
+
+        setInterval(updateElapsedTime, 1000);
+        updateElapsedTime(); // Atualização inicial
+    </script>
+</body>
+
+</html>
